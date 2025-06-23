@@ -43,6 +43,7 @@ public class TC1SettingFragment extends SettingFragment {
     Preference regetdata;
     EditTextPreference name_preference;
     EditTextPreference interval;
+    EditTextPreference power_calibration;
     CheckBoxPreference old_protocol;
     SwitchPreference child_lock;
     SwitchPreference led_lock;
@@ -153,7 +154,7 @@ public class TC1SettingFragment extends SettingFragment {
                 //region 发送请求数据
                 case 3:
                     handler.removeMessages(3);
-                    Send("{\"mac\":\"" + device.getMac() + "\",\"version\":null,\"led_lock\":null,\"child_lock\":null,\"interval\":null,\"lock\":null,\"ssid\":null}");
+                    Send("{\"mac\":\"" + device.getMac() + "\",\"version\":null,\"led_lock\":null,\"child_lock\":null,\"interval\":null,\"power_calibration\":null,\"lock\":null,\"ssid\":null}");
                     break;
                 //endregion
             }
@@ -181,6 +182,7 @@ public class TC1SettingFragment extends SettingFragment {
         regetdata = findPreference("regetdata");
         name_preference = (EditTextPreference) findPreference("name");
         interval = (EditTextPreference) findPreference("interval");
+        power_calibration = (EditTextPreference) findPreference("power_calibration");
         old_protocol = (CheckBoxPreference) findPreference("old_protocol");
         child_lock = (SwitchPreference) findPreference("child_lock");
         led_lock = (SwitchPreference) findPreference("led_lock");
@@ -252,6 +254,21 @@ public class TC1SettingFragment extends SettingFragment {
                 } else {
                     Toast.makeText(getActivity(), "输入有误!范围1-255", Toast.LENGTH_SHORT).show();
                 }
+                return false;
+            }
+        });
+        //endregion
+        //region 设置功率校准系数
+        power_calibration.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+
+                //int val = Integer.parseInt((String) newValue);
+                //if (val > 0) {
+                    Send("{\"mac\":\"" + device.getMac() + "\",\"power_calibration\":" + (String) newValue + "}");
+                //} else {
+                //   Toast.makeText(getActivity(), "输入有误!范围1-255", Toast.LENGTH_SHORT).show();
+                //}
                 return false;
             }
         });
@@ -513,6 +530,13 @@ public class TC1SettingFragment extends SettingFragment {
                 int interval_time = jsonObject.getInt("interval");
                 interval.setSummary(String.valueOf(interval_time));
                 interval.setText(String.valueOf(interval_time));
+            }
+            //endregion
+            //region 获取功率校准系数
+            if (jsonObject.has("power_calibration")) {
+                double power_calibration_val = jsonObject.getDouble("power_calibration");
+                power_calibration.setSummary(String.valueOf(power_calibration_val));
+                power_calibration.setText(String.valueOf(power_calibration_val));
             }
             //endregion
             //region 夜间模式 led锁

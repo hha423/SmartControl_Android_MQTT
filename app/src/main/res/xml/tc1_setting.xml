@@ -30,6 +30,14 @@
             android:negativeButtonText="取消"
             android:positiveButtonText="保存"
             android:title="上报频率(秒)" />
+        <EditTextPreference
+            android:dialogMessage="功率校准系数,默认为1倍"
+            android:dialogTitle="功率校准系数"
+            android:inputType="number|numberDecimal"
+            android:key="power_calibration"
+            android:negativeButtonText="取消"
+            android:positiveButtonText="确认"
+            android:title="功率校准系数" />
         <SwitchPreference
             android:defaultValue="false"
             android:key="led_lock"
