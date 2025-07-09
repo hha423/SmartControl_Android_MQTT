@@ -1,10 +1,5 @@
 package com.zyc.zcontrol;
 
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static com.zyc.Function.getLocalVersionName;
-import static com.zyc.Function.returnDeviceClass;
-import static java.lang.Integer.parseInt;
-
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -19,15 +14,14 @@ import android.content.pm.ActivityInfo;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -44,15 +38,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.viewpager.widget.ViewPager;
-
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
@@ -80,6 +67,23 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.viewpager.widget.ViewPager;
+import io.noties.markwon.Markwon;
+import io.noties.markwon.image.AsyncDrawable;
+import io.noties.markwon.image.glide.GlideImagesPlugin;
+
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static com.zyc.Function.getLocalVersionName;
+import static com.zyc.Function.returnDeviceClass;
+import static java.lang.Integer.parseInt;
 public class MainActivity extends AppCompatActivity {
     public final static String Tag = "MainActivity";
     final static int PRIVACYPOLICY_INT = 1;   //隐私协议标识,更新隐私协议需要更新此值
@@ -1062,40 +1066,122 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateApp(final String tag_name, final String name, final String body, final String created_at) {
 
-        //region 显示APP更新弹窗
-        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this)
-                .setTitle("请更新版本:" + tag_name)
-                .setMessage(name + "\r\n" + body + "\r\n更新日期:" + created_at)
-                .setPositiveButton("更新", new DialogInterface.OnClickListener() {
+        final View popupView = getLayoutInflater().inflate(R.layout.app_popupwindow_main_update, null);
+        final PopupWindow window = new PopupWindow(popupView, MATCH_PARENT, MATCH_PARENT, true);//wrap_content,wrap_content
+
+        //region 更新内容显示
+        TextView tv_verison = popupView.findViewById(R.id.tv_verison);
+        tv_verison.setText("请更新APP:" + tag_name);
+        TextView tv_title = popupView.findViewById(R.id.tv_title);
+        tv_title.setText(name);
+        TextView tv_time = popupView.findViewById(R.id.tv_time);
+        tv_time.setText("更新时间:"+created_at);
+
+
+        TextView tv_body = popupView.findViewById(R.id.tv_body);
+        Markwon markwon = Markwon.builder(MainActivity.this)
+                .usePlugin(GlideImagesPlugin.create(MainActivity.this))
+                //.usePlugin(HighlightExtension.create()) // 启用高亮扩展
+                .usePlugin(GlideImagesPlugin.create(Glide.with(MainActivity.this)))
+                .usePlugin(GlideImagesPlugin.create(new GlideImagesPlugin.GlideStore() {
+                    @NonNull
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Uri uri = Uri.parse("https://www.coolapk.com/apk/com.zyc.zcontrol");
-                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                        startActivity(intent);
+                    public RequestBuilder<Drawable> load(@NonNull AsyncDrawable drawable) {
+                        return Glide.with(MainActivity.this).load(drawable.getDestination());
                     }
-                })
-                .setNegativeButton("取消", null)
-                .create();
-        alertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "不再提示此版本", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void cancel(@NonNull com.bumptech.glide.request.target.Target<?> target) {
+                        Glide.with(MainActivity.this).clear(target);
+                    }
+
+                })).build();
+        String s=body.replace("\r\n", "\n\n");
+        Log.d(Tag,s);
+        markwon.setMarkdown(tv_body, s);
+
+
+        //endregion
+        //region 控件初始化
+        Button btn_ok1 = popupView.findViewById(R.id.btn_ok1);
+        btn_ok1.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View v) {
+                Uri uri = Uri.parse("https://a.app.qq.com/o/simple.jsp?pkgname=com.zyc.zcontrol");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+                //window.dismiss();
+            }
+        });
+        Button btn_ok2 = popupView.findViewById(R.id.btn_ok2);
+        btn_ok2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse("https://www.coolapk.com/apk/com.zyc.zcontrol");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+                //window.dismiss();
+            }
+        });
+        popupView.findViewById(R.id.tv_no_remind).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 mEditor = getSharedPreferences("Setting", 0).edit();
                 mEditor.putString("version_no_ask", tag_name);
                 mEditor.commit();
+                window.dismiss();
             }
         });
-        alertDialog.show();
+        popupView.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                window.dismiss();
+            }
+        });
+        //region window初始化
+        window.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.alpha(0xffff0000)));
+        window.setOutsideTouchable(true);
 
-        // 在dialog执行show之后才能来设置
-        TextView tvMsg = (TextView) alertDialog.findViewById(android.R.id.message);
-        String HtmlStr = String.format(getResources().getString(R.string.app_ota_message), name, body, created_at).replace("\n", "<br />");
-        Log.d(Tag, HtmlStr);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            tvMsg.setText(Html.fromHtml(HtmlStr, Html.FROM_HTML_MODE_COMPACT));
-        } else {
-            tvMsg.setText(Html.fromHtml(HtmlStr));
-        }
         //endregion
+        //endregion
+        window.update();
+        window.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+
+
+//        //region 显示APP更新弹窗
+//        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this)
+//                .setTitle("请更新版本:" + tag_name)
+//                .setMessage(name + "\r\n" + body + "\r\n更新日期:" + created_at)
+//                .setPositiveButton("更新", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        Uri uri = Uri.parse("https://www.coolapk.com/apk/com.zyc.zcontrol");
+//                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+//                        startActivity(intent);
+//                    }
+//                })
+//                .setNegativeButton("取消", null)
+//                .create();
+//        alertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "不再提示此版本", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                mEditor = getSharedPreferences("Setting", 0).edit();
+//                mEditor.putString("version_no_ask", tag_name);
+//                mEditor.commit();
+//            }
+//        });
+//        alertDialog.show();
+//
+//        // 在dialog执行show之后才能来设置
+//        TextView tvMsg = (TextView) alertDialog.findViewById(android.R.id.message);
+//        String HtmlStr = String.format(getResources().getString(R.string.app_ota_message), name, body, created_at).replace("\n", "<br />");
+//        Log.d(Tag, HtmlStr);
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+//            tvMsg.setText(Html.fromHtml(HtmlStr, Html.FROM_HTML_MODE_COMPACT));
+//        } else {
+//            tvMsg.setText(Html.fromHtml(HtmlStr));
+//        }
+//        //endregion
 
     }
     //endregion

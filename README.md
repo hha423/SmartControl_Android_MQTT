@@ -53,5 +53,6 @@
 
 ## Stargazers over time
 
-[![Stargazers over time](https://starchart.cc/a2633063/SmartControl_Android_MQTT.svg)](https://starchart.cc/a2633063/SmartControl_Android_MQTT)
+[![Stargazers over time](https://starchart.cc/a2633063/SmartControl_Android_MQTT.svg?variant=adaptive)](https://starchart.cc/a2633063/SmartControl_Android_MQTT)
+
 

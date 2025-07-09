@@ -7,7 +7,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 54
-        versionName "v1.12.2"
+        versionName "v1.12.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -40,6 +40,13 @@ dependencies {
     implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
+
+    implementation "io.noties.markwon:core:4.6.2"
+    implementation "io.noties.markwon:ext-strikethrough:4.6.2"
+    implementation "io.noties.markwon:ext-tables:4.6.2"
+    implementation "io.noties.markwon:ext-tasklist:4.6.2"
+    implementation "io.noties.markwon:image:4.6.2"
+    implementation 'io.noties.markwon:image-glide:4.6.2'
     //implementation project(':esptouch')
 
     //EasyLink  广播组播同时发的版本

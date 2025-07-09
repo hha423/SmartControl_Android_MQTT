@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:background="#80000000"
+    android:gravity="center">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="32dp"
+        android:background="#ff333333"
+        android:gravity="center"
+        android:paddingBottom="0dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp">
+
+        <TextView
+            android:id="@+id/tv_verison"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="请更新:"
+            android:textSize="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/tv_no_remind"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:textSize="12dp"
+            android:gravity="center"
+            android:textColor="@color/colorAccent"
+            android:text="不再提示"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_verison"/>
+
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="更新标题"
+            android:textSize="24dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_verison"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"
+            android:minWidth="300dp"
+            android:maxWidth="600dp"
+            android:textSize="14dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:padding="4dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title"
+            app:layout_constraintBottom_toTopOf="@+id/tv_time"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="更新时间:"
+            android:textSize="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_body" />
+        <TextView
+            android:id="@+id/tv_tip"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="请务必仔细阅读升级文档后再升级!"
+            android:textSize="15dp"
+            android:textColor="@android:color/holo_red_light"
+            app:layout_constraintTop_toBottomOf="@+id/tv_time"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:background="#ff333333"
+                android:text="取消"
+                app:layout_constraintTop_toBottomOf="@+id/tv_tip"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+
+            <Button
+                android:id="@+id/btn_ok1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:background="#ff333333"
+                android:text="去应用宝更新"
+                app:layout_constraintTop_toTopOf="@+id/btn_cancel"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_cancel"
+                app:layout_constraintEnd_toStartOf="@+id/btn_ok2"/>
+
+        <Button
+            android:id="@+id/btn_ok2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#ff333333"
+            android:text="去酷安更新"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintTop_toTopOf="@+id/btn_cancel"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_cancel"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</LinearLayout>
