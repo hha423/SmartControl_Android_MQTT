@@ -265,7 +265,7 @@ public class TC1SettingFragment extends SettingFragment {
 
                 //int val = Integer.parseInt((String) newValue);
                 //if (val > 0) {
-                    Send("{\"mac\":\"" + device.getMac() + "\",\"power_calibration\":" + (String) newValue + "}");
+                Send("{\"mac\":\"" + device.getMac() + "\",\"power_calibration\":" + (String) newValue + "}");
                 //} else {
                 //   Toast.makeText(getActivity(), "输入有误!范围1-255", Toast.LENGTH_SHORT).show();
                 //}
@@ -532,13 +532,6 @@ public class TC1SettingFragment extends SettingFragment {
                 interval.setText(String.valueOf(interval_time));
             }
             //endregion
-            //region 获取功率校准系数
-            if (jsonObject.has("power_calibration")) {
-                double power_calibration_val = jsonObject.optDouble("power_calibration",1);
-                power_calibration.setSummary(String.valueOf(power_calibration_val));
-                power_calibration.setText(String.valueOf(power_calibration_val));
-            }
-            //endregion
             //region 夜间模式 led锁
             if (jsonObject.has("led_lock")) {
                 int led_lock_val = jsonObject.getInt("led_lock");
@@ -628,6 +621,16 @@ public class TC1SettingFragment extends SettingFragment {
             //endregion
 
 
+            //region 获取功率校准系数
+            if (jsonObject.has("power_calibration")) {
+                if (jsonObject.get("power_calibration") instanceof Integer
+                        || jsonObject.get("power_calibration") instanceof Double) {
+                    double power_calibration_val = jsonObject.getDouble("power_calibration");
+                    power_calibration.setSummary(String.valueOf(power_calibration_val));
+                    power_calibration.setText(String.valueOf(power_calibration_val));
+                }
+            }
+            //endregion
         } catch (JSONException e) {
             e.printStackTrace();
         }

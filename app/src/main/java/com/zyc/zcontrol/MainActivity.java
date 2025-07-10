@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
                         final String name = obj.getString("name");
                         final String tag_name = obj.getString("tag_name");
                         final String created_at = obj.getString("created_at");
-
+                        //updateApp(tag_name, name, body, created_at);
                         String tag_name_old = getLocalVersionName(MainActivity.this);
                         if (tag_name.equals(tag_name_old)) {
                             Log.d(Tag, "已是最新版本");
@@ -1110,6 +1110,7 @@ public class MainActivity extends AppCompatActivity {
                 Uri uri = Uri.parse("https://a.app.qq.com/o/simple.jsp?pkgname=com.zyc.zcontrol");
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
+                Toast.makeText(MainActivity.this, "若市场未提示更新,可能在审核中,请稍后或更换市场再试", Toast.LENGTH_LONG).show();
                 //window.dismiss();
             }
         });
@@ -1120,6 +1121,7 @@ public class MainActivity extends AppCompatActivity {
                 Uri uri = Uri.parse("https://www.coolapk.com/apk/com.zyc.zcontrol");
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
+                Toast.makeText(MainActivity.this, "若市场未提示更新,可能在审核中,请稍后或更换市场再试", Toast.LENGTH_LONG).show();
                 //window.dismiss();
             }
         });
