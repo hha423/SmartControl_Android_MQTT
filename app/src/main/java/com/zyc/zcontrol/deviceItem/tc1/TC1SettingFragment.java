@@ -534,7 +534,7 @@ public class TC1SettingFragment extends SettingFragment {
             //endregion
             //region 获取功率校准系数
             if (jsonObject.has("power_calibration")) {
-                double power_calibration_val = jsonObject.getDouble("power_calibration");
+                double power_calibration_val = jsonObject.optDouble("power_calibration",1);
                 power_calibration.setSummary(String.valueOf(power_calibration_val));
                 power_calibration.setText(String.valueOf(power_calibration_val));
             }
